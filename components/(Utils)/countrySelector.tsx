@@ -7,8 +7,7 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  TextInput,
-  ActivityIndicator,
+
 } from "react-native";
 import { Entypo } from "@expo/vector-icons";
 import Colors from "@/constants/Colors";
@@ -16,13 +15,14 @@ export default function CountryCode({
   countryFlag,
   changeCountryCode,
   changeCountryFlag,
+  displayNotification,
 }: any) {
   const [show, setShow] = useState(false);
 
   return (
     <View style={styles.container}>
       <TouchableOpacity
-        // onPress={() => setShow(true)}
+       onPress={() => displayNotification()}
         style={{
           display: "flex",
           flex: 1,

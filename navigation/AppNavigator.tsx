@@ -14,7 +14,7 @@ import {
   FontAwesome6,
 } from "@expo/vector-icons";
 import Colors from "@/constants/Colors";
-import Withdraw from "@/screens/Withdraw";
+import Withdraw from "@/screens/withdraw";
 import Profile from "@/screens/profile";
 import Referral from "@/screens/referral";
 import Login from "@/screens/login";
@@ -22,6 +22,8 @@ import Signup from "@/screens/signup";
 import SecondWelcomePage from "@/screens/secondWelcomePage";
 import ThirdWelcomePage from "@/screens/thirdWelcomePage";
 import Transactions from "@/screens/transactions";
+import Community from "@/screens/community";
+import SharingDeposit from "@/screens/sharingDeposit";
 
 function HomeNavigator() {
   return (
@@ -31,24 +33,16 @@ function HomeNavigator() {
   );
 }
 
-function DepositNavigator() {
+function CommunityNavigator() {
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
-      <Stack.Screen name='deposit' component={Deposit} />
-    </Stack.Navigator>
-  );
-}
-function WithdrawNavigator() {
-  return (
-    <Stack.Navigator screenOptions={{headerShown: false}}>
-      <Stack.Screen name='withdraw' component={Withdraw} />
+      <Stack.Screen name='community' component={Community} />
     </Stack.Navigator>
   );
 }
 function ReferralNavigator() {
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
-      <Stack.Screen name='home' component={Home} />
       <Stack.Screen name='referral' component={Referral} />
     </Stack.Navigator>
   );
@@ -56,7 +50,6 @@ function ReferralNavigator() {
 function ProfileNavigator() {
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
-      <Stack.Screen name='home' component={Home} />
       <Stack.Screen name='profile' component={Profile} />
     </Stack.Navigator>
   );
@@ -85,7 +78,7 @@ function MainNavigator() {
             return (
               <Ionicons name='person-circle-sharp' size={21} color={color} />
             );
-          } else if (route.name === "Deposit") {
+          } else if (route.name === "Community") {
             return (
               <MaterialCommunityIcons
                 name='tray-arrow-down'
@@ -115,8 +108,7 @@ function MainNavigator() {
     >
       {/* <Tabs.Screen name='Deposit' component={DepositNavigator} /> */}
       <Tabs.Screen name='Home' component={HomeNavigator} />
-
-      {/* <Tabs.Screen name='Withdraw' component={WithdrawNavigator} /> */}
+      <Tabs.Screen name='Community' component={CommunityNavigator} />
       <Tabs.Screen name='Referral' component={ReferralNavigator} />
       <Tabs.Screen name='Profile' component={ProfileNavigator} />
     </Tabs.Navigator>
@@ -131,8 +123,11 @@ const AppNavigator = () => {
           headerShown: false,
         }}
       >
-        <Stack.Screen name='deposit' component={Deposit} />
         <Stack.Screen name='MainNavigator' component={MainNavigator} />
+        <Stack.Screen name='withdraw' component={Withdraw} />
+        <Stack.Screen name='deposit' component={Deposit} />
+        <Stack.Screen name='sharingDeposit' component={SharingDeposit} />
+
         <Stack.Screen name='transactions' component={Transactions} />
         <Stack.Screen name='secondWelcomePage' component={SecondWelcomePage} />
         <Stack.Screen name='thirdWelcomePage' component={ThirdWelcomePage} />

@@ -22,8 +22,10 @@ const lightMode = {
   placeHolderTextColor: "rgba(0, 0, 0, .45)",
   countrySelectionBorderColor: "rgba(0, 0, 0, 0.3)",
   countrySelectionTextColor: "white",
-  statusBar: "dark-content",
+  statusBar: "light-content",
   depositBackground: "rgba(128, 128, 128, 0.1)",
+  toastModalBackgroundColor: "rgba(250, 250, 250, 0.95)",
+  toastText: "rgba(0, 0, 0, 1)",
 };
 const darkMode = {
   background: "#0C121D",
@@ -45,11 +47,13 @@ const darkMode = {
   placeHolderTextColor: "rgba(256, 256, 256, 0.45)",
   countrySelectionBorderColor: "rgba(256, 256, 256, 0.3)",
   countrySelectionTextColor: "black",
-  statusBar: "light-content",
-  depositBackground: "rgba(0, 0, 0, 0.23)",
+  statusBar: "dark-content",
+  depositBackground: "rgba(0, 0, 0, 0.7)",
+  toastModalBackgroundColor: "rgba(10, 10, 10, 0.8)",
+  toastText: "rgba(256, 256, 256, 0.9)",
 };
 let Colors: any = null;
-let constant: any = 2;
+let constant: any = 2 ;
 const switchConstantValue = (): void => {
   if (constant === 1) {
     constant = 2;

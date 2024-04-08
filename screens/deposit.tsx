@@ -2,6 +2,7 @@
 
 import ExploreHeader from "../components/ExploreHeader";
 import React, {useState, useEffect, useRef} from "react";
+import * as Haptics from "expo-haptics";
 import {
   View,
   Text,
@@ -20,14 +21,13 @@ import {
   Pressable,
   Vibration,
   Keyboard,
-  SafeAreaView,
 } from "react-native";
 import {
   Feather,
   MaterialCommunityIcons,
   MaterialIcons,
 } from "@expo/vector-icons";
-import {FontAwesome6} from "@expo/vector-icons";
+import {FontAwesome6, AntDesign} from "@expo/vector-icons";
 import Colors from "../constants/Colors";
 <MaterialCommunityIcons name='hand-wave-outline' size={24} color='black' />;
 const screenHeight = Dimensions.get("window").height;
@@ -46,7 +46,7 @@ import {formatNumberWithCommasAndDecimal2} from "../components/(Utils)/formatNum
 import CountryCode from "@/components/(Utils)/countrySelector";
 import VerifyMobileNumber from "@/components/(Utils)/VerifyMobileNumber";
 import NetworkModalPage from "@/components/(Utils)/NetworkModalPage";
-import Toast, { IToast } from "@/components/(Utils)/toastNotification";
+import ToastNotification from "@/components/(Utils)/toastNotification";
 
 const data = data1[0];
 // Calculate the percentage value
@@ -183,10 +183,13 @@ const Deposit = (props: any, {navigation, title}: any) => {
   const [networkModal, setNetworkModal] = useState<string>("");
   function openNetworkModal() {
     if (network.length === 0) {
+      triggerHapticFeedback();
       setNetworkModal("first");
     } else if (network.length === 1) {
+      triggerHapticFeedback();
       setNetworkModal("second");
     } else if (network.length > 2 || network.length === 2) {
+      triggerHapticFeedback();
       setNetworkModal("third");
     }
   }
@@ -396,7 +399,7 @@ const Deposit = (props: any, {navigation, title}: any) => {
           }
           setPhoneNumberLoadingSymbol("");
         } else {
-         Keyboard.dismiss();
+          Keyboard.dismiss();
           setPhoneNumberError(false);
           if (network.length === 0) {
             setPhoneNumberLoadingSymbol("");
@@ -455,18 +458,25 @@ const Deposit = (props: any, {navigation, title}: any) => {
     setLoading2(true);
     setTimeout(() => {
       if (betIdLoadingSymbol !== "false") {
+        triggerHapticFeedback();
         setBetIdError(true);
         setTriggerBetIdRevalidation2(true);
       }
       if (phoneNumberLoadingSymbol !== "false") {
+        triggerHapticFeedback();
         setPhoneNumberError(true);
         setTriggerPhoneNumberRevalidation2(true);
+      }
+      if (amountLoadingSymbol !== "false") {
+        triggerHapticFeedback();
+        setAmountError(true);
+        setTriggerAmountRevalidation2(true);
       }
 
       if (
         betIdLoadingSymbol !== "false" ||
-         phoneNumberLoadingSymbol !== "false" ||
-          amountLoadingSymbol !== "false" 
+        phoneNumberLoadingSymbol !== "false" ||
+        amountLoadingSymbol !== "false"
       ) {
         setLoading2(false);
         return;
@@ -474,9 +484,38 @@ const Deposit = (props: any, {navigation, title}: any) => {
 
       const formData = {
         betId: betId,
-        //  fullname: fullname,
-        //  email: email,
-        //  number: number,
+        number: number,
+        amount: amount,
+      };
+      console.log(formData);
+    }, 1000);
+  }
+
+  function handleSubmit2(value: any) {
+    setLoading2(true);
+    setTimeout(() => {
+      if (betIdLoadingSymbol !== "false") {
+        triggerHapticFeedback();
+        setBetIdError(true);
+        setTriggerBetIdRevalidation2(true);
+      }
+      if (phoneNumberLoadingSymbol !== "false") {
+        triggerHapticFeedback();
+        setPhoneNumberError(true);
+        setTriggerPhoneNumberRevalidation2(true);
+      }
+      if (
+        betIdLoadingSymbol !== "false" ||
+        phoneNumberLoadingSymbol !== "false"
+      ) {
+        setLoading2(false);
+        return;
+      }
+
+      const formData = {
+        betId: betId,
+        number: number,
+        amount: value,
       };
       console.log(formData);
     }, 1000);
@@ -518,11 +557,11 @@ const Deposit = (props: any, {navigation, title}: any) => {
     }
   };
 
-  useEffect(() => {
-    setTimeout(() => {
-      scrollTo();
-    }, 4000);
-  }, [scrollTo]);
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     scrollTo();
+  //   }, 4000);
+  // }, [scrollTo]);
 
   // Auto-Verifying inputs on first load
   useEffect(() => {
@@ -530,38 +569,18 @@ const Deposit = (props: any, {navigation, title}: any) => {
     wrapperSignUpPhoneNumberVerification();
   }, []);
 
-
-  const toastRef = useRef<IToast>(null);
-
-    function show() {
-    toastRef.current?.hide(() => {
-      toastRef.current?.show('Posting...', 'info', 400);
-    })
+  const [show, setShow] = useState(true);
+  function displayNotification() {
+    setShow(false);
+    triggerHapticFeedback();
+    setTimeout(() => {
+      setShow(true);
+    }, 3800);
   }
 
-  function hide() {
-    toastRef.current?.hide();
-  }
-
-  function showSuccess() {
-    toastRef.current?.hide(() => {
-      toastRef.current?.show('Posted', 'success', 400);
-    })
-  }
-
-  function showError() {
-    toastRef.current?.hide(() => {
-      toastRef.current?.show('Ops, something is wrong!', 'error', 400);
-    })
-  }
-
-  function handleHide() {
-    console.log('toast is hidden');
-  }
-
-
-
-
+  const triggerHapticFeedback = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+  };
 
   return (
     <View
@@ -571,21 +590,6 @@ const Deposit = (props: any, {navigation, title}: any) => {
       }}
     >
       <ExploreHeader3 />
-      <SafeAreaView style={styles.container}>
-        <Toast ref={toastRef} onHide={handleHide} />
-        <TouchableOpacity style={styles.infoButton} onPress={show}>
-          <Text style={styles.text}>Info Toast</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.successButton} onPress={showSuccess}>
-          <Text style={styles.text}>Success Toast</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.errorButton} onPress={showError}>
-          <Text style={styles.text}>Error Toast</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.hideButton} onPress={hide}>
-          <Text style={styles.text}>Hide Toast</Text>
-        </TouchableOpacity>
-      </SafeAreaView>
       <View
         style={{
           flex: 1,
@@ -625,6 +629,18 @@ const Deposit = (props: any, {navigation, title}: any) => {
           </Text>
           <View></View>
         </View>
+        <ToastNotification
+          show={show}
+          text='Désolé Seuls les numéros béninois sont autorisés'
+          textColor={Colors.toastText}
+          icon={
+            <AntDesign
+              name='exclamationcircleo'
+              size={40}
+              color={Colors.toastText}
+            />
+          }
+        />
 
         <TouchableWithoutFeedback onPress={handleDismissKeyboard}>
           <ScrollView
@@ -794,7 +810,7 @@ const Deposit = (props: any, {navigation, title}: any) => {
                   <MaterialIcons
                     name='arrow-drop-down'
                     size={30}
-                    color='black'
+                    color={Colors.primary3}
                   />
                 </TouchableOpacity>
               </View>
@@ -910,6 +926,7 @@ const Deposit = (props: any, {navigation, title}: any) => {
                 </PopInAnimation>
 
                 <CountryCode
+                  displayNotification={displayNotification}
                   countryFlag={countryFlag}
                   countryCode={countryCode}
                   changeCountryCode={changeCountryCode}
@@ -1000,7 +1017,7 @@ const Deposit = (props: any, {navigation, title}: any) => {
               </Text>
               <View
                 style={{
-                  height: 185,
+                  height: 135,
                   width: "100%",
                   display: "flex",
                   flexDirection: "row",
@@ -1012,13 +1029,14 @@ const Deposit = (props: any, {navigation, title}: any) => {
               >
                 {slides3.map((choice, index) => {
                   return (
-                    <View
+                    <TouchableOpacity
                       style={{
                         width: 110,
-                        height: 82,
-                        backgroundColor: "rgba(256, 256, 256, 0.4)",
+                        height: 62,
+                        backgroundColor: Colors.inputBackground,
                         borderRadius: 8,
                       }}
+                      onPress={() => handleSubmit2(choice.amount)}
                     >
                       <View
                         style={{
@@ -1034,51 +1052,9 @@ const Deposit = (props: any, {navigation, title}: any) => {
                       >
                         <Text
                           style={{
-                            fontSize: 10,
-                            color: Colors.default1,
-                          }}
-                        >
-                          XOF{" "}
-                          {formatNumberWithCommasAndDecimal2(
-                            (3 * choice.amount) / 100
-                          )}{" "}
-                          Remise
-                        </Text>
-                      </View>
-                      <View
-                        style={{
-                          display: "flex",
-                          flexDirection: "column",
-                          gap: 4,
-                          alignItems: "center",
-                          justifyContent: "center",
-                          flex: 1,
-                        }}
-                      >
-                        <Text
-                          style={{
-                            fontSize: 15,
-                            color: Colors.welcomeText,
-                            fontWeight: "900",
-                          }}
-                        >
-                          <Text
-                            style={{
-                              fontSize: 12,
-                              fontWeight: "500",
-                            }}
-                          >
-                            {" "}
-                            XOF
-                          </Text>{" "}
-                          {formatNumberWithCommasAndDecimal2(choice.amount)}
-                        </Text>
-                        <Text
-                          style={{
                             fontSize: 12,
-                            color: Colors.welcomeText,
-                            opacity: 0.48,
-                            fontWeight: "300",
+                            color: Colors.default1,
+                            fontWeight: "500",
                           }}
                         >
                           <Text
@@ -1100,7 +1076,36 @@ const Deposit = (props: any, {navigation, title}: any) => {
                           {formatNumberWithCommasAndDecimal2(choice.amount)}
                         </Text>
                       </View>
-                    </View>
+                      <View
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: 4,
+                          alignItems: "center",
+                          justifyContent: "center",
+                          flex: 1,
+                        }}
+                      >
+                        <Text
+                          style={{
+                            fontSize: 15,
+                            color: Colors.welcomeText,
+                            fontWeight: "900",
+                          }}
+                        >
+                          <Text
+                            style={{
+                              fontSize: 9,
+                              fontWeight: "900",
+                            }}
+                          >
+                            {" "}
+                            XOF
+                          </Text>{" "}
+                          {formatNumberWithCommasAndDecimal2(choice.amount)}
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
                   );
                 })}
               </View>
@@ -1185,14 +1190,72 @@ const Deposit = (props: any, {navigation, title}: any) => {
                 display: "flex",
                 flexDirection: "row",
                 gap: 8,
-                marginTop: 60,
-                marginBottom: 400,
+                marginTop: 30,
+                marginBottom: 27,
                 opacity: loading2 ? 0.5 : 1,
               }}
               onPress={handleSubmit}
             >
               {loading2 && <ActivityIndicator size='small' color='white' />}
               <Text style={defaultStyles.btnText}>Procéder</Text>
+            </TouchableOpacity>
+            {/* <View
+              style={{
+                backgroundColor: Colors.welcomeText,
+                marginBottom: 40,
+                height: 1.5,
+                width: "70%",
+                alignItems: "center",
+                justifyContent: "center",
+                alignSelf: "center",
+                opacity: 0.4,
+                // position: "relative",
+              }}
+            >
+              <Text
+                style={{
+                  position: "absolute",
+                  width: 50,
+                  backgroundColor: Colors.background,
+                  textAlign: "center",
+                  color: Colors.welcomeText,
+                  opacity: 2,
+                }}
+              >
+                ou
+              </Text>
+            </View> */}
+            <TouchableOpacity
+              style={{
+                // backgroundColor: "white",
+                // height: 50,
+                borderRadius: 8,
+                justifyContent: "center",
+                alignItems: "center",
+                display: "flex",
+                flexDirection: "row",
+                gap: 8,
+                marginBottom: 150,
+                opacity: loading2 ? 0.5 : 1,
+                // borderColor: Colors.default1,
+                // borderWidth: 1.3,
+              }}
+              onPress={() => props.navigation.push("sharingDeposit")}
+            >
+              <Text
+                style={[
+                  defaultStyles.btnText,
+                  {
+                    color: Colors.welcomeText,
+                    marginLeft: 2,
+                  },
+                ]}
+              >
+                <Text style={{textDecorationLine: "underline"}}>
+                  Partager à un ami.
+                </Text>{" "}
+                <MaterialCommunityIcons name='share' size={20} />
+              </Text>
             </TouchableOpacity>
           </ScrollView>
         </TouchableWithoutFeedback>
@@ -1219,7 +1282,6 @@ const Deposit = (props: any, {navigation, title}: any) => {
     </View>
   );
 };
-
 
 const styles = StyleSheet.create({
   container: {
@@ -1273,47 +1335,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#ccc",
-  },
-  infoButton: {
-    backgroundColor: "#0077ed",
-    borderRadius: 10,
-    width: "80%",
-    padding: 16,
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 20,
-  },
-  successButton: {
-    backgroundColor: "#1f8503",
-    borderRadius: 10,
-    width: "80%",
-    padding: 16,
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 20,
-  },
-  errorButton: {
-    backgroundColor: "#f00a1d",
-    borderRadius: 10,
-    width: "80%",
-    padding: 16,
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 20,
-  },
-  hideButton: {
-    backgroundColor: "grey",
-    borderRadius: 10,
-    width: "80%",
-    padding: 16,
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 20,
-  },
-  text: {
-    fontSize: 20,
-    color: "white",
-    fontWeight: "600",
   },
 });
 

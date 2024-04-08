@@ -7,17 +7,7 @@ import {useFonts} from "expo-font";
 import AppNavigator from './navigation/AppNavigator';
 import {store} from "./redux/store";
 import {Provider} from "react-redux";
-// const loadFonts = () => {
-//   return Font.loadAsync({
-//     mon: require("../assets/fonts/Roboto/Roboto-Regular.ttf"),
-//     "mon-sb": require("../assets/fonts/Roboto/Roboto-Medium.ttf"),
-//     "mon-b": require("../assets/fonts/Roboto/Roboto-Bold.ttf"),
-//     "mon-i": require("../assets/fonts/Roboto/Roboto-Italic.ttf"),
-//     "new-mon-i": require("../assets/fonts/Roboto/Peralta/Peralta-Regular.ttf"),
-//   });
-// }
 export default function App() {
-
   const [loaded, error] = useFonts({
     mon: require("./assets/fonts/Roboto/Roboto-Regular.ttf"),
     "mon-sb": require("./assets/fonts/Roboto/Roboto-Medium.ttf"),
@@ -41,10 +31,8 @@ export default function App() {
     return null;
   }
 
-
   return (
     <Provider store={store}>
-    
       <AppNavigator />
     </Provider>
   );
