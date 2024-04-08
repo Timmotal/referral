@@ -14,7 +14,6 @@ import {
   FontAwesome6,
 } from "@expo/vector-icons";
 import Colors from "@/constants/Colors";
-import Withdraw from "@/screens/withdraw";
 import Profile from "@/screens/profile";
 import Referral from "@/screens/referral";
 import Login from "@/screens/login";
@@ -24,6 +23,7 @@ import ThirdWelcomePage from "@/screens/thirdWelcomePage";
 import Transactions from "@/screens/transactions";
 import Community from "@/screens/community";
 import SharingDeposit from "@/screens/sharingDeposit";
+import Withdraw from "@/screens/withdraw";
 
 function HomeNavigator() {
   return (

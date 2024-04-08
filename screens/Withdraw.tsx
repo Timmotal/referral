@@ -52,7 +52,7 @@ const data = data1[0];
 // Calculate the percentage value
 const percentageHeight = screenHeight * 0.375;
 const percentageHeight2 = screenHeight * 1;
-const Withdrawal = (props: any, {navigation, title}: any) => {
+const Withdraw = (props: any, {navigation, title}: any) => {
   const [loading, setLoading] = useState(false);
   const [index, setIndex] = useState(0);
   // EXTRA SETTINGS ........
@@ -1520,7 +1520,6 @@ const Withdrawal = (props: any, {navigation, title}: any) => {
                   }}
                   selectionColor={Colors.default1}
                   onEndEditing={SignUpBetCodeVerification}
-               
                 ></TextInput>
                 <Text style={{paddingLeft: 2, paddingRight: 10.4, opacity: 1}}>
                   <FontAwesome6
@@ -1672,4 +1671,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Withdrawal;
+export default Withdraw;
