@@ -5,11 +5,11 @@ import Deposit from "../screens/deposit";
 import {NavigationContainer} from "@react-navigation/native";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator(); 
 const Tabs = createBottomTabNavigator();
 import {
   FontAwesome5,
-  Ionicons,
+  Ionicons, 
   MaterialCommunityIcons,
   FontAwesome6,
 } from "@expo/vector-icons";
@@ -23,8 +23,8 @@ import ThirdWelcomePage from "@/screens/thirdWelcomePage";
 import Transactions from "@/screens/transactions";
 import Community from "@/screens/community";
 import SharingDeposit from "@/screens/sharingDeposit";
-import Withdraw from "@/screens/withdraw";
-
+import Withdraw from "@/screens/Withdraw";
+ 
 function HomeNavigator() {
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
@@ -42,7 +42,14 @@ function CommunityNavigator() {
 }
 function ReferralNavigator() {
   return (
-    <Stack.Navigator screenOptions={{headerShown: false}}>
+    <Stack.Navigator screenOptions={{
+      headerShown: true,
+      headerLeft: () => <Ionicons name="chevron-back-circle-outline" size={24} color="black" />,
+                title: 'Referral', // Set your title here
+                headerTitleAlign: 'center', // Center the title
+                
+    }}
+    >
       <Stack.Screen name='referral' component={Referral} />
     </Stack.Navigator>
   );
